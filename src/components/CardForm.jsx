@@ -1,7 +1,11 @@
-import { useState, useContext } from "react";
-import { ProvaContext } from "../store/ProvaContext";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { add } from "../redux/citiesSlice";
 
-function CardForm({addCity}){
+function CardForm(){
+
+  const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
     name:"",
     description:"",
@@ -11,7 +15,8 @@ function CardForm({addCity}){
 
   const handleInputChange = (e) => {
     const {name, value, type, checked} = e.target;
-    const inputValue = type == "checkbox" ? checked : value
+    const inputValue = type == "checkbox" ? checked : value;
+
     setFormData({
       ...formData,
       [name]: inputValue,
@@ -35,28 +40,45 @@ function CardForm({addCity}){
       isVisited:false,
     })
 
-    addCity(city);
+    dispatch(add(city));
   };
 
-  const {count } = useContext(ProvaContext)
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-80 mb-10 bg-zinc-900 p-5 rounded-lg">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-3 w-80 mb-10 bg-zinc-900 p-5 rounded-lg">
       <div className="flex flex-col">
         <label className="text-white">Nome</label>
-        <input type="text" name="name" value={formData.name} onChange={handleInputChange} />
+        <input
+        type="text"
+        name="name"
+        value={formData.name}
+        onChange={handleInputChange} />      
       </div>
       <div className="flex flex-col">
-        <label className="text-white">Descrizione {count}</label>
-        <textarea name="description" value={formData.description} onChange={handleInputChange}></textarea>
+        <label className="text-white">Descrizione</label>
+        <textarea
+          name="description"
+          value={formData.description}
+          onChange={handleInputChange}>
+        </textarea>
       </div>
       <div className="flex flex-col">
         <label className="text-white">Immagine</label>
-        <input type="text" name="imgURL" value={formData.imgURL} onChange={handleInputChange} />
+        <input
+          type="text"
+          name="imgURL"
+          value={formData.imgURL}
+          onChange={handleInputChange} />
       </div>
       <div className="flex flex-col">
         <label className="text-white">Visitata</label>
-        <input type="checkbox" name="isVisited" checked={formData.isVisited} onChange={handleInputChange} />
+        <input
+          type="checkbox"
+          name="isVisited"
+          checked={formData.isVisited}
+          onChange={handleInputChange} />
       </div>
 
       <button type="submit">Aggiungi Card</button>
